@@ -173,23 +173,23 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
     <div className="space-y-6">
 
       {/* Mode toggle */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           onClick={() => { setMode("upload"); stopCamera() }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             mode === "upload"
               ? "bg-blue-600 text-white"
-              : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200"
+              : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
           }`}
         >
           <Upload size={15} /> Upload files
         </button>
         <button
           onClick={() => { setMode("camera"); startCamera() }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             mode === "camera"
               ? "bg-blue-600 text-white"
-              : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200"
+              : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
           }`}
         >
           <Camera size={15} /> Live camera
@@ -200,29 +200,29 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
       {mode === "upload" && (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-2xl p-14 text-center cursor-pointer transition-all ${
+          className={`border-2 border-dashed rounded-3xl p-8 sm:p-14 text-center cursor-pointer transition-all duration-300 ${
             isDragActive
-              ? "border-blue-500 bg-blue-950/20 scale-[1.01]"
-              : "border-gray-700 hover:border-gray-500 bg-gray-900/40 hover:bg-gray-900/60"
+              ? "border-blue-500 bg-blue-50/50 scale-[1.02] shadow-xl shadow-blue-500/10"
+              : "border-gray-300 hover:border-blue-400 bg-white hover:bg-blue-50/30 hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-0.5"
           }`}
         >
           <input {...getInputProps()} />
-          <Upload size={44} className={`mx-auto mb-4 ${isDragActive ? "text-blue-400" : "text-gray-600"}`} />
-          <p className="text-gray-200 font-semibold text-lg">
-            {isDragActive ? "Drop images here…" : "Drop product images here"}
+          <Upload size={44} className={`mx-auto mb-4 ${isDragActive ? "text-blue-500" : "text-gray-400"}`} />
+          <p className="text-gray-900 font-semibold text-base sm:text-lg">
+            {isDragActive ? "Drop images here…" : "Upload Product Photos for Digitization"}
           </p>
-          <p className="text-gray-500 text-sm mt-2 max-w-md mx-auto">
-            Upload multiple angles of the same product — they'll be grouped by filename prefix
-            (e.g. <span className="font-mono text-gray-400">S221234199_*</span>)
-            and fused for maximum accuracy.
+          <p className="text-gray-500 text-xs sm:text-sm mt-2 max-w-md mx-auto px-4">
+            Upload multiple angles of the same product. Files sharing a prefix
+            (e.g. <span className="font-mono text-gray-600 font-medium">SKU1234_*</span>)
+            will be combined into a single, highly-detailed product record.
           </p>
-          <p className="text-gray-600 text-xs mt-3">JPG · PNG · WEBP supported</p>
+          <p className="text-gray-400 text-xs mt-3 font-medium tracking-wide">JPG · PNG · WEBP supported</p>
         </div>
       )}
 
       {/* Camera view */}
       {mode === "camera" && (
-        <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-700">
+        <div className="bg-white rounded-2xl overflow-hidden border border-gray-200">
           <video
             ref={videoRef}
             autoPlay
@@ -230,24 +230,24 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
             muted
             className="w-full max-h-80 object-cover bg-black"
           />
-          <div className="p-4 flex gap-3 justify-center items-center">
+          <div className="p-4 flex flex-wrap gap-2 sm:gap-3 justify-center items-center">
             <button
               onClick={capturePhoto}
               disabled={!cameraActive}
-              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-colors"
+              className="flex-1 sm:flex-none justify-center bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-40 text-white px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-95"
             >
-              <Camera size={16} /> Capture photo
+              <Camera size={16} /> Capture
             </button>
             <button
               onClick={stopCamera}
-              className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2.5 rounded-xl text-sm transition-colors"
+              className="flex-1 sm:flex-none justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
             >
               Stop
             </button>
             {!cameraActive && (
               <button
                 onClick={startCamera}
-                className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2.5 rounded-xl text-sm transition-colors"
+                className="flex-1 sm:flex-none justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
               >
                 Start camera
               </button>
@@ -261,10 +261,10 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
         <div className="space-y-4">
 
           {/* Queue header */}
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-300">
-              <span className="font-semibold text-white">{queued.length}</span> image{queued.length > 1 ? "s" : ""} queued
-              across <span className="font-semibold text-white">{productCount}</span> product{productCount > 1 ? "s" : ""}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold text-gray-900">{queued.length}</span> image{queued.length > 1 ? "s" : ""} queued
+              across <span className="font-semibold text-gray-900">{productCount}</span> product{productCount > 1 ? "s" : ""}
             </p>
             <button
               onClick={clearAll}
@@ -276,10 +276,10 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
 
           {/* Product groups */}
           {Object.entries(groupedQueued).map(([group, items]) => (
-            <div key={group} className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-              <div className="px-4 py-2.5 bg-gray-800/60 flex items-center gap-2">
-                <Package size={14} className="text-blue-400 shrink-0" />
-                <span className="text-xs font-mono text-blue-300 font-medium">{group}</span>
+            <div key={group} className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-1 transition-all duration-300 overflow-hidden group/card">
+              <div className="px-4 py-3 bg-gray-50/80 border-b border-gray-100 flex items-center gap-2">
+                <Package size={14} className="text-blue-600 shrink-0" />
+                <span className="text-xs font-mono text-blue-800 font-semibold">{group}</span>
                 <span className="text-xs text-gray-500 ml-1">
                   {items.length} angle{items.length > 1 ? "s" : ""} →
                   {items.length > 1
@@ -293,7 +293,7 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
                     <img
                       src={item.preview}
                       alt=""
-                      className="w-20 h-20 object-cover rounded-lg border border-gray-700"
+                      className="w-20 h-20 object-cover rounded-lg border border-gray-200 shadow-sm"
                     />
                     <button
                       onClick={() => removeQueued(item.idx)}
@@ -308,12 +308,12 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
           ))}
 
           {/* Extract buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             {/* Per-product sequential */}
             <button
               onClick={handleExtract}
               disabled={loading}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors text-sm"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 text-white py-3.5 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:scale-[1.01] active:scale-95 text-sm"
             >
               {loading && progress ? (
                 <>
@@ -333,7 +333,7 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
               <button
                 onClick={handleBatchExtract}
                 disabled={loading}
-                className="flex-1 bg-purple-700 hover:bg-purple-600 disabled:opacity-50 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors text-sm"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 text-white py-3.5 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30 hover:scale-[1.01] active:scale-95 text-sm"
               >
                 {loading ? (
                   <>
@@ -357,8 +357,8 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
       {error && (
         <div className={`flex items-start gap-3 rounded-xl p-4 border ${
           error.startsWith("Done - ")
-            ? "bg-green-950/40 border-green-800 text-green-300"
-            : "bg-red-950/40 border-red-800 text-red-300"
+            ? "bg-green-50 border-green-200 text-green-800"
+            : "bg-red-50 border-red-200 text-red-800"
         }`}>
           <AlertTriangle size={17} className="mt-0.5 shrink-0" />
           <p className="text-sm">{error}</p>

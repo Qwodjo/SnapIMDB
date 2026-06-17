@@ -308,13 +308,32 @@ async def evaluate_from_file(
     if not gt_records:
         raise HTTPException(400, "Ground truth file is empty or could not be parsed")
 
-    n = min(len(pred_records), len(gt_records))
+    # 1. Create Ground Truth Dictionary keyed by barcode
+    gt_map = {}
+    for gt in gt_records:
+        barcode = str(gt.get("barcode", "")).upper().strip()
+        if barcode:
+            gt_map[barcode] = gt
+
     totals  = {k: 0 for k in FIELD_KEYS}
     matches = {k: 0 for k in FIELD_KEYS}
+    records_compared = 0
+    unmatched_predictions = 0
 
-    for i in range(n):
-        pred = pred_records[i]
-        gt   = gt_records[i]
+    # 2. Iterate through predictions and lookup by barcode
+    for pred in pred_records:
+        pred_barcode_raw = pred.get("barcode", {})
+        pred_barcode = (
+            pred_barcode_raw.get("value", "") if isinstance(pred_barcode_raw, dict)
+            else str(pred_barcode_raw)
+        ).upper().strip()
+
+        if not pred_barcode or pred_barcode not in gt_map:
+            unmatched_predictions += 1
+            continue
+
+        gt = gt_map[pred_barcode]
+        records_compared += 1
 
         for key in FIELD_KEYS:
             pred_raw = pred.get(key, {})
@@ -333,12 +352,13 @@ async def evaluate_from_file(
         key: round(matches[key] / totals[key], 3) if totals[key] else 0.0
         for key in FIELD_KEYS
     }
-    overall = round(sum(per_column.values()) / len(per_column), 3)
+    overall = round(sum(per_column.values()) / len(per_column), 3) if per_column else 0.0
 
     return {
         "per_column": per_column,
         "overall": overall,
-        "records_compared": n,
+        "records_compared": records_compared,
+        "unmatched_predictions": unmatched_predictions,
         "gt_total": len(gt_records),
         "pred_total": len(pred_records),
         "column_labels": {

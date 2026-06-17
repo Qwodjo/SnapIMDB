@@ -26,10 +26,10 @@ const COLUMNS = [
 // ── Confidence helpers ────────────────────────────────────────────────────────
 
 function cellBg(conf, value) {
-  if (!value) return "bg-gray-800/40 border-gray-700/40 text-gray-600"
-  if (conf >= 0.75) return "bg-green-900/30 border-green-700/40 text-green-100"
-  if (conf >= 0.50) return "bg-yellow-900/30 border-yellow-700/40 text-yellow-100"
-  return "bg-red-900/30 border-red-700/40 text-red-200"
+  if (!value) return "bg-gray-50 border-gray-200 text-gray-500"
+  if (conf >= 0.75) return "bg-green-50 border-green-200 text-green-800"
+  if (conf >= 0.50) return "bg-yellow-50 border-yellow-200 text-yellow-800"
+  return "bg-red-50 border-red-200 text-red-800"
 }
 
 function dotColor(conf, value) {
@@ -82,7 +82,7 @@ function EditableCell({ field, fieldKey, onSave }) {
             if (e.key === "Enter")  commit()
             if (e.key === "Escape") cancel()
           }}
-          className="flex-1 min-w-0 bg-gray-700 border border-blue-500 rounded px-2 py-1 text-xs text-white outline-none focus:ring-1 focus:ring-blue-400"
+          className="flex-1 min-w-0 bg-white border border-blue-500 rounded px-2 py-1 text-xs text-gray-900 outline-none focus:ring-1 focus:ring-blue-400"
         />
         <button
           onClick={commit}
@@ -202,7 +202,7 @@ export default function ResultsTable({ records, setRecords }) {
     <div className="space-y-5">
 
       {/* ── Stats bar ── */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
         {[
           { label: "Products",   value: records.length,  color: "text-white" },
           { label: "Fill rate",  value: `${fillRate}%`,  color: "text-blue-300" },
@@ -210,27 +210,27 @@ export default function ResultsTable({ records, setRecords }) {
           { label: "Uncertain",  value: yellowCount,      color: "text-yellow-400" },
           { label: "Flagged",    value: redCount,         color: "text-red-400" },
         ].map(s => (
-          <div key={s.label} className="bg-gray-900 border border-gray-800 rounded-xl px-4 py-3">
-            <p className="text-xs text-gray-500">{s.label}</p>
-            <p className={`text-xl font-bold mt-0.5 ${s.color}`}>{s.value}</p>
+          <div key={s.label} className="bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-2xl px-5 py-4 shadow-sm hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-1 transition-all duration-300">
+            <p className="text-xs text-gray-500 font-medium">{s.label}</p>
+            <p className={`text-2xl font-bold mt-1 text-gray-900`}>{s.value}</p>
           </div>
         ))}
       </div>
 
       {/* Duplicate / conflict alerts */}
       {dupCount > 0 && (
-        <div className="flex items-center gap-2 bg-orange-950/30 border border-orange-800/50 rounded-xl px-4 py-2.5">
-          <AlertTriangle size={15} className="text-orange-400 shrink-0" />
-          <p className="text-sm text-orange-300">
+        <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-xl px-4 py-2.5">
+          <AlertTriangle size={15} className="text-orange-500 shrink-0" />
+          <p className="text-sm text-orange-800">
             <span className="font-semibold">{dupCount} duplicate record{dupCount > 1 ? "s" : ""}</span> detected
             — marked in the table below. Review before exporting.
           </p>
         </div>
       )}
       {conflictCount > 0 && (
-        <div className="flex items-center gap-2 bg-yellow-950/30 border border-yellow-800/50 rounded-xl px-4 py-2.5">
-          <AlertTriangle size={15} className="text-yellow-400 shrink-0" />
-          <p className="text-sm text-yellow-300">
+        <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-2.5">
+          <AlertTriangle size={15} className="text-yellow-500 shrink-0" />
+          <p className="text-sm text-yellow-800">
             <span className="font-semibold">{conflictCount} record{conflictCount > 1 ? "s" : ""}</span> have
             critic-flagged inconsistencies — see notes in the table.
           </p>
@@ -238,11 +238,11 @@ export default function ResultsTable({ records, setRecords }) {
       )}
 
       {/* ── Action bar ── */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={handleCopySummary}
-            className="flex items-center gap-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-2 rounded-lg text-xs transition-colors"
+            className="flex items-center gap-1.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-3 py-2 rounded-lg text-xs transition-colors"
           >
             {copied ? <CheckCheck size={14} className="text-green-400" /> : <Copy size={14} />}
             {copied ? "Copied!" : "Copy summary"}
@@ -266,7 +266,7 @@ export default function ResultsTable({ records, setRecords }) {
         <button
           onClick={handleExport}
           disabled={exporting}
-          className="flex items-center gap-2 bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors"
+          className="w-full sm:w-auto flex justify-center items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 disabled:opacity-50 text-white px-6 py-2.5 rounded-2xl text-sm font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-[1.02] active:scale-95"
         >
           {exporting
             ? <><Loader2 size={16} className="animate-spin" /> Exporting…</>
@@ -276,15 +276,15 @@ export default function ResultsTable({ records, setRecords }) {
       </div>
 
       {/* ── Table ── */}
-      <div className="overflow-x-auto rounded-xl border border-gray-800 shadow-xl">
+      <div className="overflow-x-auto rounded-2xl border border-gray-200/80 shadow-md shadow-blue-900/5 bg-white/80 backdrop-blur-sm">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-900 border-b border-gray-800">
+            <tr className="bg-gradient-to-r from-gray-50 to-slate-50 border-b border-gray-200/80">
               <th className="px-3 py-3 text-left text-xs text-gray-500 font-medium w-10 shrink-0">#</th>
               {COLUMNS.map(col => (
                 <th
                   key={col.key}
-                  className={`px-2 py-3 text-left text-xs text-gray-400 font-semibold tracking-wide ${col.width}`}
+                  className={`px-2 py-3 text-left text-xs text-gray-600 font-semibold tracking-wide ${col.width}`}
                 >
                   {col.label}
                 </th>
@@ -297,10 +297,10 @@ export default function ResultsTable({ records, setRecords }) {
               <>
                 <tr
                   key={`row-${recIdx}`}
-                  className={`border-b border-gray-800/60 transition-colors ${
+                  className={`border-b border-gray-100 transition-colors ${
                     rec.is_duplicate
-                      ? "bg-orange-950/10 hover:bg-orange-950/20"
-                      : "hover:bg-gray-900/40"
+                      ? "bg-orange-50 hover:bg-orange-100"
+                      : "hover:bg-gray-50"
                   }`}
                 >
                   {/* Row number */}
@@ -336,9 +336,9 @@ export default function ResultsTable({ records, setRecords }) {
 
                 {/* Duplicate note row */}
                 {rec.is_duplicate && (
-                  <tr key={`dup-${recIdx}`} className="border-b border-gray-800/40 bg-orange-950/10">
+                  <tr key={`dup-${recIdx}`} className="border-b border-gray-100 bg-orange-50/50">
                     <td colSpan={COLUMNS.length + 2} className="px-4 py-1.5">
-                      <span className="text-xs text-orange-400 flex items-center gap-1.5">
+                      <span className="text-xs text-orange-600 flex items-center gap-1.5">
                         <AlertTriangle size={11} />
                         Duplicate of product: <span className="font-mono font-medium">{rec.duplicate_of}</span>
                       </span>
@@ -348,9 +348,9 @@ export default function ResultsTable({ records, setRecords }) {
 
                 {/* Conflict note row */}
                 {rec.has_conflicts && rec.conflict_notes && (
-                  <tr key={`conf-${recIdx}`} className="border-b border-gray-800/40 bg-yellow-950/10">
+                  <tr key={`conf-${recIdx}`} className="border-b border-gray-100 bg-yellow-50/50">
                     <td colSpan={COLUMNS.length + 2} className="px-4 py-1.5">
-                      <span className="text-xs text-yellow-400 flex items-center gap-1.5">
+                      <span className="text-xs text-yellow-600 flex items-center gap-1.5">
                         <AlertTriangle size={11} />
                         Critic note: {rec.conflict_notes}
                       </span>
