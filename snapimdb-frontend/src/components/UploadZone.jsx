@@ -8,7 +8,7 @@ import {
 
 // FIXED FOR PRODUCTION:
 // This reads the Vercel environment variable, or defaults to localhost
-const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
+const API = import.meta.env.VITE_API_URL || "https://snapimdb-api.onrender.com";
 
 export default function UploadZone({ records, setRecords, loading, setLoading }) {
   const [mode, setMode] = useState("upload")
@@ -179,8 +179,8 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
         <button
           onClick={() => { setMode("upload"); stopCamera() }}
           className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${mode === "upload"
-              ? "bg-blue-600 text-white"
-              : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+            ? "bg-blue-600 text-white"
+            : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
             }`}
         >
           <Upload size={15} /> Upload files
@@ -188,8 +188,8 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
         <button
           onClick={() => { setMode("camera"); startCamera() }}
           className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${mode === "camera"
-              ? "bg-blue-600 text-white"
-              : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+            ? "bg-blue-600 text-white"
+            : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
             }`}
         >
           <Camera size={15} /> Live camera
@@ -201,8 +201,8 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
         <div
           {...getRootProps()}
           className={`border-2 border-dashed rounded-3xl p-8 sm:p-14 text-center cursor-pointer transition-all duration-300 ${isDragActive
-              ? "border-blue-500 bg-blue-50/50 scale-[1.02] shadow-xl shadow-blue-500/10"
-              : "border-gray-300 hover:border-blue-400 bg-white hover:bg-blue-50/30 hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-0.5"
+            ? "border-blue-500 bg-blue-50/50 scale-[1.02] shadow-xl shadow-blue-500/10"
+            : "border-gray-300 hover:border-blue-400 bg-white hover:bg-blue-50/30 hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-0.5"
             }`}
         >
           <input {...getInputProps()} />
@@ -355,8 +355,8 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
       {/* Error / success message */}
       {error && (
         <div className={`flex items-start gap-3 rounded-xl p-4 border ${error.startsWith("Done - ")
-            ? "bg-green-50 border-green-200 text-green-800"
-            : "bg-red-50 border-red-200 text-red-800"
+          ? "bg-green-50 border-green-200 text-green-800"
+          : "bg-red-50 border-red-200 text-red-800"
           }`}>
           <AlertTriangle size={17} className="mt-0.5 shrink-0" />
           <p className="text-sm">{error}</p>

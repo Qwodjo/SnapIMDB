@@ -5,22 +5,22 @@ import {
   AlertTriangle, Loader2, Copy, CheckCheck
 } from "lucide-react"
 
-const API = "http://localhost:8000"
+const API = import.meta.env.VITE_API_URL || "https://snapimdb-api.onrender.com";
 
 const COLUMNS = [
-  { key: "item_name",        label: "ITEM NAME",      width: "min-w-[260px]" },
-  { key: "barcode",          label: "BARCODE",         width: "min-w-[150px]" },
-  { key: "manufacturer",     label: "MANUFACTURER",    width: "min-w-[160px]" },
-  { key: "brand",            label: "BRAND",           width: "min-w-[120px]" },
-  { key: "weight",           label: "WEIGHT",          width: "min-w-[100px]" },
-  { key: "packaging_type",   label: "PACKAGING",       width: "min-w-[140px]" },
-  { key: "country",          label: "COUNTRY",         width: "min-w-[120px]" },
-  { key: "variant",          label: "VARIANT",         width: "min-w-[110px]" },
-  { key: "type",             label: "TYPE",            width: "min-w-[130px]" },
-  { key: "fragrance_flavor", label: "FLAVOR",          width: "min-w-[110px]" },
-  { key: "promotion",        label: "PROMO",           width: "min-w-[120px]" },
-  { key: "addons",           label: "ADDONS",          width: "min-w-[120px]" },
-  { key: "tagline",          label: "TAGLINE",         width: "min-w-[160px]" },
+  { key: "item_name", label: "ITEM NAME", width: "min-w-[260px]" },
+  { key: "barcode", label: "BARCODE", width: "min-w-[150px]" },
+  { key: "manufacturer", label: "MANUFACTURER", width: "min-w-[160px]" },
+  { key: "brand", label: "BRAND", width: "min-w-[120px]" },
+  { key: "weight", label: "WEIGHT", width: "min-w-[100px]" },
+  { key: "packaging_type", label: "PACKAGING", width: "min-w-[140px]" },
+  { key: "country", label: "COUNTRY", width: "min-w-[120px]" },
+  { key: "variant", label: "VARIANT", width: "min-w-[110px]" },
+  { key: "type", label: "TYPE", width: "min-w-[130px]" },
+  { key: "fragrance_flavor", label: "FLAVOR", width: "min-w-[110px]" },
+  { key: "promotion", label: "PROMO", width: "min-w-[120px]" },
+  { key: "addons", label: "ADDONS", width: "min-w-[120px]" },
+  { key: "tagline", label: "TAGLINE", width: "min-w-[160px]" },
 ]
 
 // ── Confidence helpers ────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@ function confLabel(conf) {
 
 function EditableCell({ field, fieldKey, onSave }) {
   const [editing, setEditing] = useState(false)
-  const [draft, setDraft]     = useState(field.value)
+  const [draft, setDraft] = useState(field.value)
 
   const commit = async () => {
     let normalized = draft
@@ -79,7 +79,7 @@ function EditableCell({ field, fieldKey, onSave }) {
           value={draft}
           onChange={e => setDraft(e.target.value)}
           onKeyDown={e => {
-            if (e.key === "Enter")  commit()
+            if (e.key === "Enter") commit()
             if (e.key === "Escape") cancel()
           }}
           className="flex-1 min-w-0 bg-white border border-blue-500 rounded px-2 py-1 text-xs text-gray-900 outline-none focus:ring-1 focus:ring-blue-400"
@@ -119,8 +119,8 @@ function EditableCell({ field, fieldKey, onSave }) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function ResultsTable({ records, setRecords }) {
-  const [exporting, setExporting]   = useState(false)
-  const [copied, setCopied]         = useState(false)
+  const [exporting, setExporting] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [clearConfirm, setClearConfirm] = useState(false)
 
   // Update a single field value
@@ -156,8 +156,8 @@ export default function ResultsTable({ records, setRecords }) {
         headers: { "Content-Type": "application/json" },
       })
       const url = URL.createObjectURL(new Blob([resp.data]))
-      const a   = document.createElement("a")
-      a.href     = url
+      const a = document.createElement("a")
+      a.href = url
       a.download = "predictions.xlsx"
       a.click()
       URL.revokeObjectURL(url)
@@ -171,8 +171,8 @@ export default function ResultsTable({ records, setRecords }) {
   const handleCopySummary = () => {
     const lines = records.map((rec, i) => {
       const brand = rec.brand?.value || ""
-      const name  = rec.item_name?.value || ""
-      const bc    = rec.barcode?.value || ""
+      const name = rec.item_name?.value || ""
+      const bc = rec.barcode?.value || ""
       return `${i + 1}. ${name} | ${brand} | ${bc}`
     })
     navigator.clipboard.writeText(lines.join("\n"))
@@ -192,10 +192,10 @@ export default function ResultsTable({ records, setRecords }) {
     })
   })
 
-  const totalFields   = records.length * COLUMNS.length
-  const filledFields  = totalFields - emptyCount
-  const fillRate      = totalFields > 0 ? Math.round(filledFields / totalFields * 100) : 0
-  const dupCount      = records.filter(r => r.is_duplicate).length
+  const totalFields = records.length * COLUMNS.length
+  const filledFields = totalFields - emptyCount
+  const fillRate = totalFields > 0 ? Math.round(filledFields / totalFields * 100) : 0
+  const dupCount = records.filter(r => r.is_duplicate).length
   const conflictCount = records.filter(r => r.has_conflicts).length
 
   return (
@@ -204,11 +204,11 @@ export default function ResultsTable({ records, setRecords }) {
       {/* ── Stats bar ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
         {[
-          { label: "Products",   value: records.length,  color: "text-white" },
-          { label: "Fill rate",  value: `${fillRate}%`,  color: "text-blue-300" },
-          { label: "High conf",  value: greenCount,       color: "text-green-400" },
-          { label: "Uncertain",  value: yellowCount,      color: "text-yellow-400" },
-          { label: "Flagged",    value: redCount,         color: "text-red-400" },
+          { label: "Products", value: records.length, color: "text-white" },
+          { label: "Fill rate", value: `${fillRate}%`, color: "text-blue-300" },
+          { label: "High conf", value: greenCount, color: "text-green-400" },
+          { label: "Uncertain", value: yellowCount, color: "text-yellow-400" },
+          { label: "Flagged", value: redCount, color: "text-red-400" },
         ].map(s => (
           <div key={s.label} className="bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-2xl px-5 py-4 shadow-sm hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-1 transition-all duration-300">
             <p className="text-xs text-gray-500 font-medium">{s.label}</p>
@@ -297,11 +297,10 @@ export default function ResultsTable({ records, setRecords }) {
               <>
                 <tr
                   key={`row-${recIdx}`}
-                  className={`border-b border-gray-100 transition-colors ${
-                    rec.is_duplicate
+                  className={`border-b border-gray-100 transition-colors ${rec.is_duplicate
                       ? "bg-orange-50 hover:bg-orange-100"
                       : "hover:bg-gray-50"
-                  }`}
+                    }`}
                 >
                   {/* Row number */}
                   <td className="px-3 py-2 text-xs text-gray-600 shrink-0">

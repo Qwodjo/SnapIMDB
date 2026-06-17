@@ -5,7 +5,7 @@ import {
   AlertTriangle, CheckCircle2, XCircle, Info
 } from "lucide-react"
 
-const API = "http://localhost:8000"
+const API = import.meta.env.VITE_API_URL || "https://snapimdb-api.onrender.com";
 
 const COLUMN_LABELS = {
   item_name: "Item Name",
@@ -190,8 +190,8 @@ export default function EvalDashboard({ records }) {
 
         <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
           <label className={`flex-1 sm:flex-none flex items-center justify-center gap-2 cursor-pointer border px-4 py-2.5 rounded-xl text-sm transition-colors ${gtFile
-              ? "bg-blue-50 border-blue-200 text-blue-700"
-              : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            ? "bg-blue-50 border-blue-200 text-blue-700"
+            : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
             }`}>
             <Upload size={15} />
             {gtFile ? gtFile.name : "Choose Excel or CSV file"}
