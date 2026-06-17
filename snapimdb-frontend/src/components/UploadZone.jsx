@@ -6,15 +6,17 @@ import {
   CheckCircle2, Package, ZapOff, Zap
 } from "lucide-react"
 
-const API = "http://localhost:8000"
+// FIXED FOR PRODUCTION:
+// This reads the Vercel environment variable, or defaults to localhost
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
 export default function UploadZone({ records, setRecords, loading, setLoading }) {
-  const [mode, setMode]           = useState("upload")
-  const [queued, setQueued]       = useState([])
-  const [error, setError]         = useState("")
-  const [progress, setProgress]   = useState("")
+  const [mode, setMode] = useState("upload")
+  const [queued, setQueued] = useState([])
+  const [error, setError] = useState("")
+  const [progress, setProgress] = useState("")
   const [cameraActive, setCameraActive] = useState(false)
-  const videoRef  = useRef(null)
+  const videoRef = useRef(null)
   const streamRef = useRef(null)
 
   // Dropzone
@@ -35,7 +37,7 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
   })
 
   const removeQueued = idx => setQueued(prev => prev.filter((_, i) => i !== idx))
-  const clearAll     = () => setQueued([])
+  const clearAll = () => setQueued([])
 
   // Camera
   const startCamera = async () => {
@@ -62,12 +64,12 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
     const video = videoRef.current
     if (!video) return
     const canvas = document.createElement("canvas")
-    canvas.width  = video.videoWidth
+    canvas.width = video.videoWidth
     canvas.height = video.videoHeight
     canvas.getContext("2d").drawImage(video, 0, 0)
     canvas.toBlob(blob => {
       if (!blob) return
-      const ts   = Date.now()
+      const ts = Date.now()
       const file = new File([blob], `capture_${ts}.jpg`, { type: "image/jpeg" })
       setQueued(prev => [...prev, {
         file,
@@ -92,7 +94,7 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
     })
 
     const groupEntries = Object.entries(groups)
-    const newRecords   = []
+    const newRecords = []
 
     for (let i = 0; i < groupEntries.length; i++) {
       const [prefix, files] = groupEntries[i]
@@ -176,21 +178,19 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => { setMode("upload"); stopCamera() }}
-          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            mode === "upload"
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${mode === "upload"
               ? "bg-blue-600 text-white"
               : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
-          }`}
+            }`}
         >
           <Upload size={15} /> Upload files
         </button>
         <button
           onClick={() => { setMode("camera"); startCamera() }}
-          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            mode === "camera"
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${mode === "camera"
               ? "bg-blue-600 text-white"
               : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
-          }`}
+            }`}
         >
           <Camera size={15} /> Live camera
         </button>
@@ -200,11 +200,10 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
       {mode === "upload" && (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-3xl p-8 sm:p-14 text-center cursor-pointer transition-all duration-300 ${
-            isDragActive
+          className={`border-2 border-dashed rounded-3xl p-8 sm:p-14 text-center cursor-pointer transition-all duration-300 ${isDragActive
               ? "border-blue-500 bg-blue-50/50 scale-[1.02] shadow-xl shadow-blue-500/10"
               : "border-gray-300 hover:border-blue-400 bg-white hover:bg-blue-50/30 hover:shadow-lg hover:shadow-blue-900/5 hover:-translate-y-0.5"
-          }`}
+            }`}
         >
           <input {...getInputProps()} />
           <Upload size={44} className={`mx-auto mb-4 ${isDragActive ? "text-blue-500" : "text-gray-400"}`} />
@@ -355,11 +354,10 @@ export default function UploadZone({ records, setRecords, loading, setLoading })
 
       {/* Error / success message */}
       {error && (
-        <div className={`flex items-start gap-3 rounded-xl p-4 border ${
-          error.startsWith("Done - ")
+        <div className={`flex items-start gap-3 rounded-xl p-4 border ${error.startsWith("Done - ")
             ? "bg-green-50 border-green-200 text-green-800"
             : "bg-red-50 border-red-200 text-red-800"
-        }`}>
+          }`}>
           <AlertTriangle size={17} className="mt-0.5 shrink-0" />
           <p className="text-sm">{error}</p>
         </div>

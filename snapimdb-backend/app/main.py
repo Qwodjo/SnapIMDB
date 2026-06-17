@@ -24,9 +24,12 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# FIXED PRODUCTION-SAFE CORS SETUP:
+# This single block securely handles your local machine AND any Vercel domain.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origin_regex=r"(http://localhost:5173|https://.*\.vercel\.app)",
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
