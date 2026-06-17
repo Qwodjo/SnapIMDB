@@ -11,7 +11,7 @@ product, self-corrects via a critic pass, and exports a confidence-scored
 
 ## Demo video
 
-[Insert your video link here once recorded — YouTube, Loom, or Google Drive]
+[https://drive.google.com/file/d/1ShJWH42I8-7SDPmL6lYucoVzqoCmb5yh/view?usp=drive_link]
 
 ## Live link (if hosted)
 
